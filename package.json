@@ -1,0 +1,13 @@
+{
+  "name": "CIT2-MTAChatbot",
+  "description": "Create a chatbot for MTA:SA",
+  "homepage": "https://github.com/maybeken/",
+  "version": "1.0.0",
+  "main": "main.js",
+  "author": "KEN U NOT",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "read-last-lines": "",
+	"robotjs": ""
+  }
+}
