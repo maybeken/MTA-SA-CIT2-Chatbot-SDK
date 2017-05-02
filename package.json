@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "main": "main.js",
   "author": "KEN U NOT",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "dependencies": {
     "read-last-lines": "",
 	"robotjs": ""
