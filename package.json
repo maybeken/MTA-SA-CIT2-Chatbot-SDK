@@ -8,7 +8,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "read-last-lines": "",
-  	"robotjs": "",
-  	"copy-paste": ""
+    "robotjs": "",
+    "copy-paste": ""
   }
 }
