@@ -14,4 +14,4 @@
 - Do NOT ask why
 - Do coffee
 
-\[T]/ Praise the sun!
+\\[T]/ Praise the sun!
