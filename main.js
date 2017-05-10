@@ -4,15 +4,19 @@ const fs = require('fs');
 const readLastLines = require('read-last-lines');
 
 const robot = require("robotjs");
+const ncp = require("copy-paste");
 
 /* Configurations */
 const filePath = 'C:/Program Files (x86)/MTA San Andreas 1.5/MTA/logs/'; // Log file folder
 const fileName = 'console.log'; // Log file name
-const filter = ['(TEAM)', '(LOC)', '(SMS)']; // Chat filter, enter the keywords you want to see
+const filter = ['(TEAM)', '(LOC)', '(SMS)']; // Chat Logging filter, enter the keywords you want to see
 
 /* No need to configure */
 const options = { persistent: true, interval: 1 };
 const chatPrefix = ['(TEAM)', '(GROUP)', '(ALLIANCE)', '(LOC)', '(FMSG)', ' > Me: '];
+
+/* Change this global variable to true to pause the script */
+var paused = false;
 
 /* Read chat from log file */
 fs.watchFile(filePath+fileName, options, (curr, prev) => {
@@ -31,16 +35,33 @@ fs.watchFile(filePath+fileName, options, (curr, prev) => {
 				}
 			*/
 			logChat(content);
+			
+			if(/* Put your function before "paused" if you want your function not affected by it */) {}
+			else if(paused) {} /* Pauses the script */
+			else if(/* Put your function after "paused" to utilize the pause function */) {}
 		}
 	);
 });
+
+/* Lazy Run Command Function */
+function runCMD(cmd, callback){
+	ncp.copy(cmd, function () {
+		robot.typeString("`");
+		robot.keyTap("v", "control");
+		robot.keyTap("enter");
+		robot.typeString("`");
+		
+		if(typeof callback === 'function')
+			callback();
+	});
+}
 
 /* Formate the chat to a json object */
 function format(line){
 	let channel = chatFilter(line, chatPrefix);
 	let msg;
 	let player;
-			
+
 	if(channel){
 		if(channel == '(SMS)'){
 			msg = line.substring(33).replace(/( > Me)/gm, "");
@@ -50,7 +71,7 @@ function format(line){
 			msg = line.substring(line.indexOf(': ', 33)+2);
 			player = line.substring(33+channel.length+1);
 			player = player.substring(0, player.length-msg.length-2);
-			
+
 			if(channel == '(LOC)'){
 				player = player.substring(player.indexOf("]")+1);
 			}
@@ -59,21 +80,21 @@ function format(line){
 		channel = '(LOGIN)';
 		player = line.substring(33, line.indexOf(' logged in'));
 	}
-	
+
 	let content = {
 		timestamp: Date.parse(line.substring(1, 20)),
 		channel: channel,
 		player: player,
 		message: msg
 	};
-	
+
 	return content;
 }
 
 /* Chat filter function */
 function chatFilter(content, filter){
 	var found = '';
-	
+
 	if(content){
 		filter.forEach(function(e){
 			if(content.indexOf(e) != -1 && found == ''){
@@ -81,10 +102,10 @@ function chatFilter(content, filter){
 			}
 		});
 	}
-	
+
 	if(found == ' > Me: ')
 		found = '(SMS)';
-	
+
 	return found;
 }
 
@@ -97,19 +118,25 @@ function logChat(content){
 			console.log(unixTime(content.timestamp) + ' ' + content.channel + ' ' + content.player);
 		}
 	}
+
+	return false; // Using false means you will let the script to continue, true to stop
 }
 
 /* Standard Unix Time conversion */
-function unixTime(unixtime) {
+function unixTime(unixtime){
 	var u = new Date(unixtime);
 
 	return u.getUTCFullYear() +
 	'-' + ('0' + u.getUTCMonth()).slice(-2) +
-	'-' + ('0' + u.getUTCDate()).slice(-2) + 
+	'-' + ('0' + u.getUTCDate()).slice(-2) +
 	' ' + ('0' + u.getUTCHours()).slice(-2) +
 	':' + ('0' + u.getUTCMinutes()).slice(-2) +
 	':' + ('0' + u.getUTCSeconds()).slice(-2)
 };
 
+function printOut(msg) {
+	console.log(unixTime(Date.now())+" (LOG) "+msg);
+}
+
 /* Tell you that it's started */
-console.log(unixTime(Date.now())+" Script started, waiting for chat log.");
+printOut("Script started, awaiting for chat log.");
