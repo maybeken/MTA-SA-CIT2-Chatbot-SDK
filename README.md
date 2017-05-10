@@ -4,7 +4,7 @@
 ## Usage
 1. Install Node on your Windows PC along with MTA:SA and GTA:SA
 2. Run "run.bat" *\*duh\**
-3. See if the chat shows up after login
+3. See if the chat shows up in console after login
 4. Add your own scripts *(Connect to Cleverbot maybe?)*
 5. Profit!
 
@@ -14,4 +14,4 @@
 - Do NOT ask why
 - Do coffee
 
-Miles Nub. \O/
+\[T]/ Praise the sun!
