@@ -2,6 +2,7 @@
 /* Dependencies import */
 const fs = require('fs');
 const readLastLines = require('read-last-lines');
+const utf8 = require('utf8');
 
 const robot = require("robotjs");
 const ncp = require("copy-paste");
@@ -23,7 +24,7 @@ fs.watchFile(filePath+fileName, options, (curr, prev) => {
 	readLastLines.read(filePath+fileName, 2)
 	.then(
 		(lines) => {
-			let content = format(lines.replace(/(\r\n|\n|\r)/gm,""));
+			let content = format(utf8.decode(lines).replace(/(\r\n|\n|\r)/gm,"")); // Fixed Unicode Problems
 			
 			/*	Do whatever you want with the content.
 			
@@ -136,6 +137,10 @@ function unixTime(unixtime){
 
 function printOut(msg) {
 	console.log(unixTime(Date.now())+" (LOG) "+msg);
+}
+
+function debug(msg) {
+	console.log(unixTime(Date.now())+" (DEBUG) "+msg);
 }
 
 /* Tell you that it's started */
